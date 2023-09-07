@@ -40,7 +40,7 @@ defmodule IsomorphicStrings205 do
     #   "g" => "d"
     # }
 
-    Enum.zip(String.graphemes(s), String.graphemes(t))
+    Enum.zip(String.codepoints(s), String.codepoints(t))
     |> Enum.reduce_while(%{}, fn {s1, s2}, acc ->
       if Map.has_key?(acc, s1) do
         v1 = acc[s1]
