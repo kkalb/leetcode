@@ -56,16 +56,10 @@ defmodule IsomorphicStrings205 do
   defp create_mapping(zipped_lists) do
     zipped_lists
     |> Enum.reduce_while(%{}, fn {s1, s2}, acc ->
-      if Map.has_key?(acc, s1) do
-        v1 = acc[s1]
-
-        if v1 == s2 do
-          {:cont, acc}
-        else
-          {:halt, nil}
-        end
-      else
-        {:cont, Map.put(acc, s1, s2)}
+      case Map.fetch(acc, s1) do
+        {:ok, v1} when v1 == s2 -> {:cont, acc}
+        :error -> {:cont, Map.put(acc, s1, s2)}
+        _ -> {:halt, nil}
       end
     end)
   end
