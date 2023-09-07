@@ -33,19 +33,17 @@ defmodule TwoSum do
   """
 
   @spec two_sum(nums :: [integer], target :: integer) :: [integer]
-  def two_sum(nums, target) do
-    nums_with_index = Enum.with_index(nums)
+  def two_sum([current | rest], target, current_index \\ 0) do
+    diff = target - current
 
-    for {v1, i1} <- nums_with_index do
-      for {v2, i2} <- nums_with_index do
-        if v1 + v2 == target and i1 != i2 do
-          [i1, i2]
-        end
-      end
-      |> Enum.reject(&is_nil(&1))
-      |> List.flatten()
-    end
-    |> Enum.reject(&(&1 == []))
-    |> Enum.at(0)
+    Enum.find_index(rest, &(&1 == diff)) |> check_index(rest, target, current_index)
+  end
+
+  defp check_index(nil, rest, target, current_index) do
+    two_sum(rest, target, current_index + 1)
+  end
+
+  defp check_index(second_index, _, _, current_index) do
+    [current_index, second_index + current_index + 1]
   end
 end
