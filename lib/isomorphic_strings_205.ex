@@ -34,13 +34,27 @@ defmodule IsomorphicStrings205 do
   def is_isomorphic(s, t) when s == t, do: true
 
   def is_isomorphic(s, t) do
+    if String.length(s) != String.length(t) do
+      false
+    else
+      is_isomorphic_complex(s, t)
+    end
+  end
+
+  defp is_isomorphic_complex(s, t) do
     # Example mapping egg <-> add
     # %{
     #   "e" => "a",
     #   "g" => "d"
     # }
+    [String.codepoints(s), String.codepoints(t)]
+    |> Enum.zip()
+    |> create_mapping()
+    |> check()
+  end
 
-    Enum.zip(String.codepoints(s), String.codepoints(t))
+  defp create_mapping(zipped_lists) do
+    zipped_lists
     |> Enum.reduce_while(%{}, fn {s1, s2}, acc ->
       if Map.has_key?(acc, s1) do
         v1 = acc[s1]
@@ -54,7 +68,6 @@ defmodule IsomorphicStrings205 do
         {:cont, Map.put(acc, s1, s2)}
       end
     end)
-    |> check()
   end
 
   defp check(nil), do: false
