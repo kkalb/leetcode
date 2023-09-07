@@ -30,5 +30,36 @@ defmodule IsomorphicStrings205 do
   s and t consist of any valid ascii character.
   """
 
-  def hello, do: :world
+  @spec is_isomorphic(s :: String.t(), t :: String.t()) :: boolean
+  def is_isomorphic(s, t) when s == t, do: true
+
+  def is_isomorphic(s, t) do
+    # Example mapping egg <-> add
+    # %{
+    #   "e" => "a",
+    #   "g" => "d"
+    # }
+
+    Enum.zip(String.graphemes(s), String.graphemes(t))
+    |> Enum.reduce_while(%{}, fn {s1, s2}, acc ->
+      if Map.has_key?(acc, s1) do
+        v1 = acc[s1]
+
+        if v1 == s2 do
+          {:cont, acc}
+        else
+          {:halt, nil}
+        end
+      else
+        {:cont, Map.put(acc, s1, s2)}
+      end
+    end)
+    |> check()
+  end
+
+  defp check(nil), do: false
+
+  defp check(result) do
+    result |> Map.keys() |> Enum.count() == result |> Map.values() |> Enum.uniq() |> Enum.count()
+  end
 end
