@@ -37,19 +37,20 @@ defmodule ValidParentheses20 do
     [f | rest] = String.graphemes(s)
 
     Enum.reduce_while(rest, [f], fn next, stack ->
-      last_item_on_stack = List.last(stack)
-      new_stack = may_remove(stack, last_item_on_stack, next)
+      next_item_on_stack = List.first(stack)
+      new_stack = may_remove(stack, next_item_on_stack, next)
 
       case new_stack do
         nil -> {:halt, [nil]}
         _ -> {:cont, new_stack}
       end
-    end) == []
+    end) ==
+      []
   end
 
-  defp may_remove(stack, "{", "}"), do: List.delete_at(stack, -1)
-  defp may_remove(stack, "(", ")"), do: List.delete_at(stack, -1)
-  defp may_remove(stack, "[", "]"), do: List.delete_at(stack, -1)
+  defp may_remove(stack, "{", "}"), do: Enum.drop(stack, 1)
+  defp may_remove(stack, "(", ")"), do: Enum.drop(stack, 1)
+  defp may_remove(stack, "[", "]"), do: Enum.drop(stack, 1)
 
   defp may_remove(_stack, "{", ")"), do: nil
   defp may_remove(_stack, "[", ")"), do: nil
@@ -58,5 +59,5 @@ defmodule ValidParentheses20 do
   defp may_remove(_stack, "(", "]"), do: nil
   defp may_remove(_stack, "{", "]"), do: nil
 
-  defp may_remove(stack, _, new_ele), do: List.insert_at(stack, -1, new_ele)
+  defp may_remove(stack, _, new_ele), do: [new_ele | stack]
 end
