@@ -33,14 +33,29 @@ defmodule TwoSum do
   """
 
   @spec two_sum(nums :: [integer], target :: integer) :: [integer]
-  def two_sum([current | rest], target, seen \\ %{}, current_index \\ 0) do
+  def two_sum(nums, target) do
+    max = Enum.max(nums)
+
+    nums
+    |> Enum.with_index()
+    |> may_reject(max, target)
+    |> two_sum(target, %{})
+  end
+
+  defp two_sum([{current, current_index} | rest], target, seen) do
     diff = target - current
     second_index = Map.get(seen, diff)
 
     if second_index do
       [current_index, second_index]
     else
-      two_sum(rest, target, Map.put(seen, current, current_index), current_index + 1)
+      two_sum(rest, target, Map.put(seen, current, current_index))
     end
   end
+
+  defp may_reject(nums, max, target) when target > max do
+    Enum.reject(nums, fn {num, _i} -> num < target - max end)
+  end
+
+  defp may_reject(nums, _max, _target), do: nums
 end
