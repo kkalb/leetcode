@@ -27,40 +27,20 @@ defmodule IsSubsequence392 do
   Follow up: Suppose there are lots of incoming s, say s1, s2, ..., sk where k >= 109, and you want to check one by one to see if t has its subsequence. In this scenario, how would you change your code?
   """
 
-  defmacro act(char_t, char_s, rest) do
-    quote do
-      cond do
-        # When char_t equals char_s and rest is empty
-        unquote(char_t) == unquote(char_s) and is_list(unquote(rest)) and unquote(rest) == [] ->
-          {:halt, []}
+  @spec is_subsequence(String.t(), String.t()) :: boolean
+  # Just problem definitions: when s is empty, its always a substring of t. When t is empty and s is not, it can never be a substring.
+  def is_subsequence(<<_char_s::binary-size(0)>>, _t), do: true
+  def is_subsequence(_s, <<_char_t::binary-size(0)>>), do: false
 
-        # When char_t does not equal char_s and rest is empty
-        unquote(char_t) != unquote(char_s) and is_list(unquote(rest)) and unquote(rest) == [] ->
-          {:cont, [unquote(char_s)]}
+  # when chars match, we use the charlists without the chars as heads
+  def is_subsequence(
+        <<char_s::binary-size(1)>> <> rest_s,
+        <<char_t::binary-size(1)>> <> rest_t
+      )
+      when char_t == char_s,
+      do: is_subsequence(rest_s, rest_t)
 
-        # When char_t equals char_s and rest is not empty
-        unquote(char_t) == unquote(char_s) and is_list(unquote(rest)) ->
-          {:cont, unquote(rest)}
-
-        # When char_t does not equal char_s and rest is not empty
-        unquote(char_t) != unquote(char_s) and is_list(unquote(rest)) ->
-          {:cont, [unquote(char_s) | unquote(rest)]}
-      end
-    end
-  end
-
-  @spec is_subsequence(s :: String.t(), t :: String.t()) :: boolean
-  def is_subsequence(s, t) do
-    solve(to_charlist(s), to_charlist(t))
-  end
-
-  defp solve([], _), do: true
-  defp solve(_, []), do: false
-
-  defp solve([char_s | rest_s], [char_t | rest_t]) do
-    case act(char_t, char_s, rest_s) do
-      {:halt, []} -> true
-      {:cont, new_rest} -> solve(new_rest, rest_t)
-    end
-  end
+  # when chars do not match, we go on with the next iteration of t while keeping the current head of s
+  def is_subsequence(s, <<_char_t::binary-size(1)>> <> rest_t),
+    do: is_subsequence(s, rest_t)
 end
