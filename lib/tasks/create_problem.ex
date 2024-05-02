@@ -29,7 +29,7 @@ defmodule Mix.Tasks.CreateProblem do
     base_folder = File.cwd!()
 
     full_file_name = Path.join([base_folder, "/lib/", file_name <> ".ex"])
-    full_test_file_name = Path.join([base_folder, "/test/", file_name <> ".exs"])
+    full_test_file_name = Path.join([base_folder, "/test/", file_name <> "_test.exs"])
     {full_file_name, full_test_file_name}
   end
 
