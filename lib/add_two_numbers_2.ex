@@ -44,15 +44,19 @@ defmodule AddTwoNumbers2 do
   defp do_add_two_numbers(nil, nil, 1), do: %ListNode{val: 1, next: nil}
 
   defp do_add_two_numbers(nil, l2, overflow),
-    do: do_add_two_numbers(l2, %ListNode{val: 0, next: nil}, overflow)
+    do: do_add_two_numbers(l2, nil, overflow)
 
   defp do_add_two_numbers(l1, nil, overflow),
     do: do_add_two_numbers(l1, %ListNode{val: 0, next: nil}, overflow)
 
-  defp do_add_two_numbers(l1, l2, overflow) do
-    sum = l1.val + l2.val + overflow
+  defp do_add_two_numbers(
+         %ListNode{val: val1, next: next1},
+         %ListNode{val: val2, next: next2},
+         overflow
+       ) do
+    sum = val1 + val2 + overflow
     {over, sum} = if sum > 9, do: {1, sum - 10}, else: {0, sum}
 
-    %ListNode{val: sum, next: do_add_two_numbers(l1.next, l2.next, over)}
+    %ListNode{val: sum, next: do_add_two_numbers(next1, next2, over)}
   end
 end
