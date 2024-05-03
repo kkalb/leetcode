@@ -28,26 +28,41 @@ defmodule LetterCombination17 do
   digits[i] is a digit in the range ['2', '9'].
   """
 
+  @digit_to_letters %{
+    "2" => ["a", "b", "c"],
+    "3" => ["d", "e", "f"],
+    "4" => ["g", "h", "i"],
+    "5" => ["j", "k", "l"],
+    "6" => ["m", "n", "o"],
+    "7" => ["p", "q", "r", "s"],
+    "8" => ["t", "u", "v"],
+    "9" => ["w", "x", "y", "z"]
+  }
+
   @spec letter_combinations(digits :: String.t()) :: [String.t()]
   def letter_combinations(""), do: []
 
   def letter_combinations(digits) do
-    <<first::bytes-size(1)>> <> rest = digits
-    rest = String.graphemes(rest)
+    letters =
+      digits
+      # string to list has linear time complexity O(n)
+      |> String.graphemes()
+      # mapping each element in the list has time complexity of O(n)
+      |> Enum.map(
+        # fixed size map lookup has constant time complexity O(1)
+        &Map.get(@digit_to_letters, &1)
+      )
 
-    Enum.reduce(rest, mapping(first), fn char, combinations ->
-      new_letters = mapping(char)
+    # time compelxity constant for first element O(1)
+    [first | rest] = letters
 
-      for comb <- combinations, new <- new_letters, do: comb <> new
+    # until here we have time complexity of 2 * O(n), which is small against the following functions
+    # iterating over (n-1) elements where n is string input length, means O(n-1)
+    # for every element, we iterate over combinations, which is O(m*k)
+    # where m is the current list of combinations and k is 3 or 4 (with worst case its 4).
+    # resulting in O(m*k*n-1)
+    Enum.reduce(rest, first, fn char, combinations ->
+      for comb <- combinations, new <- char, do: comb <> new
     end)
   end
-
-  defp mapping("2"), do: ["a", "b", "c"]
-  defp mapping("3"), do: ["d", "e", "f"]
-  defp mapping("4"), do: ["g", "h", "i"]
-  defp mapping("5"), do: ["j", "k", "l"]
-  defp mapping("6"), do: ["m", "n", "o"]
-  defp mapping("7"), do: ["p", "q", "r", "s"]
-  defp mapping("8"), do: ["t", "u", "v"]
-  defp mapping("9"), do: ["w", "x", "y", "z"]
 end
