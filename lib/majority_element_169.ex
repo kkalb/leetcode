@@ -38,8 +38,6 @@ defmodule MajorityElement169 do
 
   defp recur([last], _count, candidate) when last === candidate, do: candidate
 
-  defp recur([last, last], _count, candidate) when last === candidate, do: candidate
-
   defp recur([head | tail], count, candidate) when head === candidate,
     do: recur(tail, count + 1, candidate)
 
