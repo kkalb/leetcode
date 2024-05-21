@@ -39,11 +39,3 @@ defmodule MergeTwoSortedLists21 do
   defp merge(ln1, ln2) when ln1.val > ln2.val,
     do: %ListNode{val: ln2.val, next: merge(ln1, ln2.next)}
 end
-
-defmodule ListNode do
-  @type t :: %__MODULE__{
-          val: integer,
-          next: ListNode.t() | nil
-        }
-  defstruct val: 0, next: nil
-end
