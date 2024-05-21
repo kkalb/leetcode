@@ -15,4 +15,8 @@ defmodule SortList148Test do
 
     assert SortList148.sort_list(list) == sorted
   end
+
+  test "Case 3" do
+    assert SortList148.sort_list(nil) == nil
+  end
 end
