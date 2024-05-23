@@ -7,7 +7,15 @@ defmodule Leetcode.MixProject do
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "coveralls.cobertura": :test
+      ]
     ]
   end
 
@@ -22,7 +30,8 @@ defmodule Leetcode.MixProject do
   defp deps do
     [
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:benchee, "~> 1.3.0", only: :dev}
+      {:benchee, "~> 1.3.0", only: :dev},
+      {:excoveralls, "~> 0.18", only: :test}
     ]
   end
 end
