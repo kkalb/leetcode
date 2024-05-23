@@ -31,25 +31,18 @@ defmodule BestTimeToBuyAndSellStock121 do
   """
 
   @spec max_profit(prices :: [integer]) :: integer
-  def max_profit([_single_price]) do
-    0
+  def max_profit([_price]), do: 0
+  def max_profit([price | prices]), do: calc_profit(prices, 0, price)
+
+  defp calc_profit([], curr_max, _curr_min), do: curr_max
+
+  defp calc_profit([price | prices], curr_max, curr_min) do
+    calc_profit(prices, new_max(price - curr_min, curr_max), new_min(price, curr_min))
   end
 
-  def max_profit(prices) do
-    get_profit(prices, 0)
-  end
+  defp new_max(diff, curr_max) when diff > curr_max, do: diff
+  defp new_max(_diff, curr_max), do: curr_max
 
-  defp get_profit([], result) do
-    result
-  end
-
-  defp get_profit([price_at_day | prices], acc) do
-    max =
-      Enum.reduce(prices, 0, fn future_price, res ->
-        win = future_price - price_at_day
-        if win > res, do: win, else: res
-      end)
-
-    get_profit(prices, if(max > acc, do: max, else: acc))
-  end
+  defp new_min(price, curr_min) when price < curr_min, do: price
+  defp new_min(_price, curr_min), do: curr_min
 end
