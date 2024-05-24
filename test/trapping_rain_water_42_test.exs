@@ -31,6 +31,21 @@ defmodule TrappingRainWater42Test do
   end
 
   test "Case 5" do
+    height = [2, 1, 0, 2]
+    output = 3
+
+    assert TrappingRainWater42.trap(height) == output
+  end
+
+  test "Case 6" do
+    height = [5, 5, 1, 7, 1, 1, 5, 2, 7, 6]
+    output = 23
+
+    assert TrappingRainWater42.trap(height) == output
+  end
+
+  @tag timeout: 120_000
+  test "Case 7" do
     height =
       "data/height.csv"
       |> File.stream!([read_ahead: 100_000], 1000)
@@ -38,6 +53,13 @@ defmodule TrappingRainWater42Test do
       |> Enum.at(0)
       |> Enum.map(&String.to_integer/1)
 
-    assert TrappingRainWater42.trap(height) == 10
+    assert TrappingRainWater42.trap(height) == 174_801_674
+  end
+
+  @tag timeout: 120_000
+  test "Case 8" do
+    height = Enum.to_list(100_000..0) |> Enum.intersperse(0)
+    # takes 49 s
+    assert TrappingRainWater42.trap(height) == 4_999_950_000
   end
 end
