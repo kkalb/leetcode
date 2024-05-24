@@ -1,17 +1,31 @@
-nums1 = [2, 2, 3, 2]
-nums2 = [0, 1, 0, 1, 0, 1, 99]
-nums3 = [4, 0, 3, 1, 0, 3, 1, 4, 0, 1, 99, 3, 4]
-nums4 = [123, 2, 4, 0, 123, 3, 2, 88, 1, 123, 117, 0, 3, 1, 2, 4, 0, 117, 117, 1, 88, 99, 3, 88, 4]
-nums5 = [123, 2, 4, 0, 77, 123, 3, 2, 88, 1, 123, 117, 0, 3, 77, 1, 2, 4, 0, 117, 117, 1, 88, 99, 3, 88, 4, 77]
+nums_2 = [2, 3]
+nums_4 = [2, 3, 1, 0]
+nums_8 = [2, 3, 1, 0, 1, 3, 2, 1]
+
+nums_16 = nums_8 ++ nums_8
+nums_32 = nums_16 ++ nums_16
+nums_64 = nums_32 ++ nums_32
+nums_128 = nums_64 ++ nums_64
+nums_256 = nums_128 ++ nums_128
+nums_512 = nums_256 ++ nums_256
+nums_1028 = nums_512 ++ nums_512
 
 Benchee.run(%{
-  "4" => fn -> SingleNumberTwo137.single_number(nums1) end,
-  "7" => fn -> SingleNumberTwo137.single_number(nums2) end,
-  "13" => fn -> SingleNumberTwo137.single_number(nums3) end,
-  "25" => fn -> SingleNumberTwo137.single_number(nums4) end,
-  "28" => fn -> SingleNumberTwo137.single_number(nums5) end,
+  "2" => fn -> JumpGame55.can_jump(nums_2) end,
+  "4" => fn -> JumpGame55.can_jump(nums_4) end,
+  "8" => fn -> JumpGame55.can_jump(nums_8) end,
+  "16" => fn -> JumpGame55.can_jump(nums_16) end,
+  "32" => fn -> JumpGame55.can_jump(nums_32) end,
+  "64" => fn -> JumpGame55.can_jump(nums_64) end,
+  "128" => fn -> JumpGame55.can_jump(nums_128) end,
+  "256" => fn -> JumpGame55.can_jump(nums_256) end,
+  "512" => fn -> JumpGame55.can_jump(nums_512) end,
+  "1028" => fn -> JumpGame55.can_jump(nums_1028) end,
+  },
+  print: %{
+    configuration: false
   },
 warmup: 1,
 time: 5,
-memory_time: 2
+memory_time: 5
 )
