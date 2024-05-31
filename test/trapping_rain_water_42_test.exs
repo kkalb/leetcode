@@ -46,6 +46,9 @@ defmodule TrappingRainWater42Test do
 
   @tag timeout: 120_000
   test "Case 7" do
+    # before preflooding 3.0s
+    # with calc of preflooding its the same :)
+
     height =
       "data/height.csv"
       |> File.stream!([read_ahead: 100_000], 1000)
@@ -58,8 +61,16 @@ defmodule TrappingRainWater42Test do
 
   @tag timeout: 120_000
   test "Case 8" do
-    height = Enum.to_list(100_000..0) |> Enum.intersperse(0)
-    # takes 49 s
-    assert TrappingRainWater42.trap(height) == 4_999_950_000
+    height = Enum.to_list(100_000..90_001) |> Enum.intersperse(0)
+    # takes 9.4 s without flooding
+    # takes 9.7 - 10 s with flood precalculation without applying
+    assert TrappingRainWater42.trap(height) == 949_905_000
+  end
+
+  test "Case 9 flood" do
+    height = [4, 0, 5, 3, 2, 1, 2, 3, 5, 0, 4]
+    output = 22
+
+    assert TrappingRainWater42.trap(height) == output
   end
 end
